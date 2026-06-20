@@ -1,52 +1,72 @@
 # RCCS-CloudAgent
 
-Claude Code and Codex plugin for the RIKEN R-CCS Cloud supercomputer.
+Claude Code and Codex plugin for the RIKEN **R-CCS Cloud** — submit and monitor Slurm jobs, manage files on the cluster, and search the built-in documentation, all from the agent.
 
-Provides two MCP servers:
-- **rccs-cloud-hpc** — submit and monitor Slurm jobs, manage files on the cluster
-- **rccs-cloud-docs** — search the built-in R-CCS Cloud guide
+R-CCS Cloud is a heterogeneous research testbed: ~20 Slurm partitions spanning CPU-only (A64FX, EPYC, Xeon), NVIDIA GPU, AMD GPU, and Intel GPU hardware. Partition selection determines everything — the hardware family, the required modules, and the job flags.
 
-## What this plugin does
+## Install
 
-- Submit jobs to any of the ~20 partitions spanning CPU-only, NVIDIA GPU, AMD GPU, and Intel GPU hardware
-- Monitor job status, read output files, and triage failures
-- Manage files on the cluster (upload, download, copy, compress, etc.)
-- Search documentation for partition specs, module commands, and conventions
+### Prerequisite: uv
 
-## Quick start
+The plugin starts its MCP servers with `uv tool run` from this repository's
+`main` branch, so `uv` must be installed and available on your PATH before
+Claude Code or Codex starts the plugin.
 
-1. Install the plugin in Claude Code or Codex (see marketplace instructions)
-2. Run `/rccs-cloud-configuring` to set up SSH access
-3. Run `/rccs-cloud-demo` for an end-to-end walkthrough
+Common install options:
 
-## Key concepts
-
-**Partition selection is everything.** The R-CCS Cloud exposes many hardware
-families through distinct Slurm partitions. Each partition requires its own
-`system/<partition>` module loaded first — loading the wrong one produces wrong
-results. See `/rccs-cloud-reference` for the quick-reference table.
-
-**The default partition is `genoa`** (AMD EPYC x86_64, 16 nodes). For GPU work
-you must explicitly choose the GPU partition that matches your codebase:
-- CUDA/nvhpc → `a100`, `ai-l40s`, `qc-a100`, `qc-gh200`, `ng-dgx-m[0-3]`
-- ROCm → `mi100`, `qc-mi250`, `fs-mi300a`, `fs-mi300x`
-- oneAPI/Intel → `qc-pvc`
-- Fujitsu A64FX → `fx700`
-
-## SSH configuration
-
-The plugin connects to `login.cloud.r-ccs.riken.jp`. Add an alias to `~/.ssh/config`:
-
-```
-Host rccs-cloud
-    HostName login.cloud.r-ccs.riken.jp
-    User <your-username>
-    IdentityFile ~/.ssh/id_rsa
+```bash
+brew install uv
 ```
 
-Then set `"ssh": {"host": "rccs-cloud"}` in `~/.rccs-cloud/config.json`.
+or:
 
-## For developers
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-See `AGENTS.md` for architecture details, design rules, and the development workflow.
-See `PORTING.md` for instructions on porting this plugin to a new machine.
+After installing uv, restart Claude Code or Codex so the plugin process inherits
+the updated PATH.
+
+### Claude Code
+
+Install in Claude Code:
+
+```
+/plugin marketplace add william-dawson/RCCS-CloudAgent
+/plugin install rccs-cloud@rccs-cloud-marketplace
+/reload-plugins
+```
+
+### Codex
+
+Install in Codex:
+
+```
+codex plugin marketplace add william-dawson/RCCS-CloudAgent
+```
+
+Then open `/plugins`, install `rccs-cloud`, start a new thread, and run
+`/rccs-cloud-demo` to verify the connection end-to-end.
+
+## Configuration
+
+Settings live in `~/.rccs-cloud/config.json`:
+
+```json
+{
+  "ssh": {"host": "rccs-cloud"}
+}
+```
+
+`ssh.host` is a `~/.ssh/config` alias or `user@hostname` (key-based auth required). The env var `RCCS_CLOUD_HOST` overrides the file.
+
+For documentation search, add your API key for the shared RIKEN embedding service:
+
+```json
+{
+  "ssh": {"host": "rccs-cloud"},
+  "embedding": {"api_key": "..."}
+}
+```
+
+The env var `RCCS_EMBED_API_KEY` sets the key. With it, docs search uses semantic (vector) matching; without it — or off the RIKEN network — it falls back to BM25 keyword search over the same content.

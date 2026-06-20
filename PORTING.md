@@ -485,6 +485,35 @@ uv tool run --quiet --from ./server <machine>-doctor
 If this fails because data is missing, fix package data first. Do not paper over
 it by adding client-specific root variables.
 
+### README format
+
+`README.md` must follow the standard format used across this plugin family:
+
+1. **`# <AgentName>`** — one-liner ending exactly with `"all from the agent."`:
+   `Claude Code and Codex plugin for the RIKEN **<machine>** — submit and monitor
+   Slurm jobs, manage files on the cluster, and search the built-in documentation,
+   all from the agent.`
+
+2. **One characterization sentence** describing the machine's dominant run mode
+   (CPU-first, GPU-first, heterogeneous testbed, etc.) and what that means for
+   users. Keep it to one sentence; details belong in skills.
+
+3. **`## Install`** with three subsections:
+   - `### Prerequisite: uv` — the standard brew/curl block plus the "restart
+     Claude Code or Codex" note. Copy verbatim from an existing README.
+   - `### Claude Code` — three commands: `/plugin marketplace add <owner>/<repo>`,
+     `/plugin install <machine>@<machine>-marketplace`, `/reload-plugins`.
+   - `### Codex` — one command: `codex plugin marketplace add <owner>/<repo>`,
+     then the prose: open `/plugins`, install `<machine>`, start a new thread,
+     run `/<machine>-demo` to verify.
+
+4. **`## Configuration`** — config file path, minimal JSON, one-sentence field
+   explanation with the env var override, then the embedding key block (same
+   `RCCS_EMBED_API_KEY` / BM25 fallback prose for all machines in this family).
+
+No other top-level sections. Extra context belongs in `AGENTS.md` (developer
+guidance) or skills (workflow guidance), not the README.
+
 ---
 
 ## 10. Phase 8 — Validate
