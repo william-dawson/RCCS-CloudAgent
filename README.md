@@ -80,6 +80,9 @@ Then open `/plugins`, install `rccs-cloud`, start a new thread, and run
 
 ### Manual (any MCP-compatible client)
 
+Both options below only register the MCP servers — copy `plugins/rccs-cloud/skills/`
+into wherever your client loads skills from too (this varies by client).
+
 #### Option A — Using Hatch!
 
 [Hatch!](https://github.com/CrackingShells/Hatch) registers MCP servers on any
