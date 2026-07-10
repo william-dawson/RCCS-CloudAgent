@@ -108,15 +108,14 @@ uv tool run --quiet --from git+https://github.com/william-dawson/RCCS-CloudAgent
 The doctor checks the config file, SSH access, Slurm, the bundled guide, the
 docs index, and the embedding endpoint.
 
-## Develop
+## Development
 
 ```bash
 cd server
-python3 -m venv .venv && .venv/bin/pip install -e .
-.venv/bin/python -m cloud_mcp.doctor        # config, SSH, Slurm, guide, index, embedding
-.venv/bin/python tests/smoke.py             # live read-only test over MCP stdio
-.venv/bin/python tests/smoke.py --job       # + submits a real tiny CPU job
-.venv/bin/python -m cloud_mcp.ingest        # rebuild the docs index after editing the guide
+uv run python -m cloud_mcp.doctor        # config, SSH, Slurm, guide, index, embedding
+uv run python tests/smoke.py             # live read-only test over MCP stdio
+uv run python tests/smoke.py --job       # + submits a real tiny CPU job
+uv run python -m cloud_mcp.ingest        # rebuild the docs index after editing the guide
 ```
 
 See [AGENTS.md](AGENTS.md) for the design rules, cluster facts, and repo map,
