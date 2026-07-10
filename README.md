@@ -120,4 +120,5 @@ python3 -m venv .venv && .venv/bin/pip install -e .
 ```
 
 See [AGENTS.md](AGENTS.md) for the design rules, cluster facts, and repo map,
-and [PORTING.md](PORTING.md) for the general porting process this repo follows.
+and [hpc-agent-core's `PORTING.md`](https://github.com/william-dawson/hpc-agent-core/blob/main/PORTING.md)
+for the general porting process this repo follows.

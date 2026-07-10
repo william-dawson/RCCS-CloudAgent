@@ -10,9 +10,9 @@ package). The general porting process this repo follows — the mental model, th
 rules, the machine-facts checklist, the config/compute wiring, validation, and
 the standing invariants — is documented once, canonically, in
 [hpc-agent-core's `PORTING.md`](https://github.com/william-dawson/hpc-agent-core/blob/main/PORTING.md)
-(and mirrored in this repo's [PORTING.md](PORTING.md) pointer). Read it before
-changing how this plugin wires into core. What follows here is only what is
-specific to *this* machine.
+(no copy or stub of it lives in this repo). Read it before changing how this
+plugin wires into core. What follows here is only what is specific to *this*
+machine.
 
 ## Design rules (read before changing code)
 
