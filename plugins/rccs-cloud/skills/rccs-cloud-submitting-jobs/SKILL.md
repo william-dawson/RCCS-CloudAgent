@@ -89,6 +89,12 @@ two most important choices before writing any script are: **which partition**
 
 5. **Verify**: `get_job_status` right after submission. A `QUEUED` job's
    `message` explains any wait; stdout lands in `<workdir>/slurm-<job_id>.out`.
+   **If you keep checking until the job finishes** (e.g. you're watching it
+   run), keep calling `get_job_status`/`get_job_statuses` on an interval —
+   see `rccs-cloud-monitoring-jobs` for status semantics and the sacct-lag
+   caveat. Don't switch to `run_command_on_cluster("squeue ...")` /
+   `sacct` for this — it's the same information, un-normalized, and skips
+   the sacct-lag handling `get_job_status` already does.
 
 ## MPI launch: use mpirun, not srun
 
@@ -127,6 +133,9 @@ gap only affects MPI rank bootstrap.)
 ## Don't
 
 - Don't launch MPI ranks with `srun` — no PMI support; use `mpirun` instead.
+- Don't poll a submitted job's progress with `run_command_on_cluster` (raw
+  `squeue`/`sacct`) — use `get_job_status`/`get_job_statuses` instead, even
+  when you're the one deciding to check in, not the user asking.
 - Don't guess module names — use `search_docs` or `run_command_on_cluster("module avail")`.
 - Don't load a system module from the wrong partition.
 - Don't run computation on the login node — submit a job.
