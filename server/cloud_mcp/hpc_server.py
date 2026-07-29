@@ -13,7 +13,7 @@ under plugins/rccs-cloud/skills/, not in long docstrings here.
 import shlex
 from pathlib import Path
 
-from mcp.server.mcpserver import MCPServer
+from hpc_agent_core.mcp_server import MCPServer
 
 from hpc_agent_core.middleware import (
     download_file,

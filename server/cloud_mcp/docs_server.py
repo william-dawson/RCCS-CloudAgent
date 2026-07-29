@@ -5,7 +5,7 @@ Read-only and needs no SSH access. The generic docs-search tools
 `hpc_agent_core.docs_server`; this module only imports the machine's config
 (registering its settings), names the MCPServer instance, and serves it.
 """
-from mcp.server.mcpserver import MCPServer
+from hpc_agent_core.mcp_server import MCPServer
 
 from hpc_agent_core.docs_server import build
 from hpc_agent_core.serving import serve
